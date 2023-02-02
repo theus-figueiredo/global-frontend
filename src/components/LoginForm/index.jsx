@@ -35,7 +35,7 @@ const LoginForm = () => {
     }
     else console.log(response);
   };
-  
+
   return (
     <Container>
       <section className='vh-100' style={{ "backgroundColor": "#508bfc" }}>
@@ -60,7 +60,7 @@ const LoginForm = () => {
                   <button type='submit' className="btn btn-primary btn-lg btn-block" disabled={disabled} onClick={handleLoginClick}>Entrar</button>
 
                   <div className='col'>
-                    <a href='#' className="small mb-5 pb-lg-2">Criar conta</a>
+                    <a href='/sign-up' className="small mb-5 pb-lg-2">Criar conta</a>
                   </div>
                 </div>
               </div>
