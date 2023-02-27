@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../../context/Context';
 import OS_Service from '../../service/OS-Service';
 import ServiceOrderTable from '../../components/OsTable/Table/Table';
+import { Container, Sidebar, Content } from './styles'
 import Loading from '../../components/Loading/Loading';
+import SideBar from '../../components/SideBar';
 
 export default function ServiceOrderPage() {
   const [fetching, setFetching] = useState(true);
@@ -14,12 +16,14 @@ export default function ServiceOrderPage() {
   useEffect(() => {
     const populateData = async () => {
       try {
-        const response = await OS_Service.getAll(user.token);
+        const token = localStorage.getItem("token");
+
+        const response = await OS_Service.getAll(JSON.parse(token));
         setAllServiceOrders(response.data);
         setFetching(false);
 
       } catch (error) {
-        navigate('/unauthorized')
+        console.log(error);
       }
     };
     populateData();
@@ -27,9 +31,15 @@ export default function ServiceOrderPage() {
 
 
   return (
-    <div className='container-fluid'>
-      {fetching && <Loading />}
-      {!fetching && <ServiceOrderTable />}
-    </div>
+    <Container>
+      <Sidebar>
+        <SideBar />
+      </Sidebar>
+
+      <Content>
+        {fetching && <Loading />}
+        {!fetching && <ServiceOrderTable />}
+      </Content>
+    </Container>
   )
 }

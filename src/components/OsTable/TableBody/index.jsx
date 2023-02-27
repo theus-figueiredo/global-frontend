@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 
 
 const columns = [
@@ -55,6 +56,11 @@ export default function OSTableBody({serviceOrders}) {
     navigate(redirectLink);
   }
 
+  const handleAddOsClick = () => {
+    const redirectLink = '/OS/AddNew';
+    navigate(redirectLink);
+  }
+
 
   return(
     <Container>
@@ -62,7 +68,10 @@ export default function OSTableBody({serviceOrders}) {
       <div className='card shadow mb-4'>
         <TableContainer sx={{ maxHeight: 630 }}>
           <div className='card-header py-3'>
-            <h6 className='m-0 font-weight-bold text-primary'>Ordens de Serviço</h6>
+            <div style={{ "display" : "flex"}}>
+              <h6 className='m-0 font-weight-bold text-primary' style={{ "paddingRight": "75%"}}>Ordens de Serviço</h6>
+              <button className='btn btn-primary btn-sm' onClick={handleAddOsClick}><AddIcon /> Adicionar OS</button>
+            </div>
           </div>
           <div className="table-responsive">
             <div className='dataTables_wrapper dt-bootstrap4' id="dataTable_wrapper">
@@ -76,7 +85,7 @@ export default function OSTableBody({serviceOrders}) {
                   {serviceOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((OS) => { return (<TableRow key={OS.id}>
                     <TableCell>{OS['identifier']}</TableCell>
                     <TableCell>{OS['creationDate']}</TableCell>
-                    <TableCell>{OS['category'][0]['category']}</TableCell>
+                    <TableCell>{OS['category']['category']}</TableCell>
                     <TableCell>{OS['costCenter']['name']}</TableCell>
                     <TableCell>{OS['status']['status']}</TableCell>
                     <TableCell><Button size="small" id={OS.id} onClick={handleSeeMoreClick}>Ver mais</Button></TableCell>

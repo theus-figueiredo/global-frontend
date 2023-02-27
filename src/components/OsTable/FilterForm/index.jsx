@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Context  from '../../../context/Context';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -10,32 +11,39 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { OS_StatusService } from '../../../service/OS-StatusService';
 import { costCenterService } from '../../../service/costCenterService';
+import { osServiceCategory } from '../../../service/osServiceCategory';
 
 export default function FilterForm({setOS}) {
+
+  const { OSFilter, setOSFilter } = useContext(Context);
+  
   const [serviceStatus, setStatus] = useState([]);
   const [costCenters, setCostCenters] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [filters, setFilters] = useState({
     identifier: '',
     creationDate: '',
-    description: '',
+    category: '',
     costCenter: '',
     status: '',
     timeFrame: '',
   });
 
-  const handleOsSearch = (event) => setFilters({...filters, identifier: event.target.value});
-  const handleDescriptionSearch = (event) => setFilters({...filters, description: event.target.value});
-  const handleCostCenterSearch = (event) => setFilters({...filters, costCenter: event.target.value});
-  const handleStatusSearch = (event) => setFilters({...filters, status: event.target.id});
-  const handleChange = (event) => setFilters({...filters, timeFrame: event.target.value});
+  const handleOsSearch = (event) => setOSFilter({...OSFilter, identifier: event.target.value});
+  const handleCategorySearch = (event) => setOSFilter({...OSFilter, category: event.target.value});
+  const handleCostCenterSearch = (event) => setOSFilter({...OSFilter, costCenter: event.target.value});
+  const handleStatusSearch = (event) => setOSFilter({...OSFilter, status: event.target.id});
+  const handleChange = (event) => setOSFilter({...OSFilter, timeFrame: event.target.value});
 
   useEffect(() => {
     async function populateState() {
       const status = await OS_StatusService.getAllStatus();
       const costCenters = await costCenterService.getAllCostCenters();
+      const { data } = await osServiceCategory.getAll();
 
       setStatus(status.data);
       setCostCenters(costCenters.data);
+      setCategories(data);
     };
     populateState();
   }, [setStatus, setCostCenters]);
@@ -44,14 +52,12 @@ export default function FilterForm({setOS}) {
     <div className='container-fluid'>
       <p className='mb-4'>Filtros:</p>
 
-      <TextField variant='outlined' label='Número de OS'onChange={handleOsSearch}/>
-
       <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
         <InputLabel id="demo-simple-select-autowidth-label">Período</InputLabel>
         <Select
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
-          value={filters.timeFrame}
+          value={OSFilter.timeFrame}
           label="período"
           onChange={handleChange}
         >
@@ -68,22 +74,22 @@ export default function FilterForm({setOS}) {
         <DatePicker
           inputFormat='DD/MM/YYYY'
           label="Data"
-          value={filters.creationDate}
+          value={OSFilter.creationDate}
           onChange={(newValue) => {
-            setFilters({...filters, creationDate: dayjs(newValue).format('DD/MM/YYYY')});
+            setOSFilter({...OSFilter, creationDate: dayjs(newValue).format('DD/MM/YYYY')});
           }}
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
 
-      <TextField variant='outlined' label='Descrição' onChange={handleDescriptionSearch}/>
+      <TextField variant='outlined' label='Número de OS'onChange={handleOsSearch}/>
 
         <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
           <InputLabel id="demo-simple-select-autowidth-label">Unidade</InputLabel>
           <Select
             labelId="demo-simple-select-autowidth-label"
             id="demo-simple-select-autowidth"
-            value={filters.costCenter}
+            value={OSFilter.costCenter}
             label="Unidade"
             onChange={handleCostCenterSearch}
           >
@@ -103,7 +109,7 @@ export default function FilterForm({setOS}) {
           <Select
             labelId="demo-simple-select-autowidth-label"
             id="demo-simple-select-autowidth"
-            value={filters.status}
+            value={OSFilter.status}
             label="Status"
             onChange={handleStatusSearch}
           >
@@ -113,6 +119,26 @@ export default function FilterForm({setOS}) {
             {serviceStatus.map((status) => {
               return(
                   <MenuItem id={status.id} value={status.status} key={status.id}>{status['status']}</MenuItem>
+                )
+              })}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+          <InputLabel id="demo-simple-select-autowidth-label">Tipo de Serviço</InputLabel>
+          <Select
+            labelId="demo-simple-select-autowidth-label"
+            id="demo-simple-select-autowidth"
+            value={OSFilter.category}
+            label="Serviço"
+            onChange={handleCategorySearch}
+          >
+            <MenuItem value="">
+              <em>Nenhum</em>
+            </MenuItem>
+            {categories.map((category) => {
+              return(
+                  <MenuItem id={category.id} value={category.category} key={category.id}>{category['category']}</MenuItem>
                 )
               })}
           </Select>

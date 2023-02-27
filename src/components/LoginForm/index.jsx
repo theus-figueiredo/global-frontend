@@ -28,9 +28,13 @@ const LoginForm = () => {
   const handleLoginClick = async () => {
     const response = await userService.login(userData.email, userData.password);
     if(response.status === 200) {
-      const redirectLink = '/os';
+
+      console.log(response.data);
+
       setUser({...user, loggedIn: true, token: response.data});
       localStorage.setItem('token', JSON.stringify(response.data));
+      
+      const redirectLink = '/os';
       navigate(redirectLink);
     }
     else console.log(response);
@@ -38,7 +42,7 @@ const LoginForm = () => {
 
   return (
     <Container>
-      <section className='vh-100' style={{ "backgroundColor": "#508bfc" }}>
+      <section className='vh-100'>
         <div className="container py-5 h-100">
           <div className='row d-flex justify-content-center align-items-center h-100'>
             <div className='col-12 col-md-8 col-lg-6 col-xl-5'>

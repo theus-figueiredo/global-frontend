@@ -1,7 +1,9 @@
 import React, {useState, useContext, useEffect} from 'react';
 import Context from '../../context/Context';
-import OsDetailsBody from '../../components/OsDetails/OsDetailsBody';
 import Loading from '../../components/Loading/Loading';
+import { Container, Sidebar, Content } from './styles';
+import SideBar from '../../components/SideBar';
+import OSDetailsBody from '../../components/OsDetails/DetailsBody';
 import http from '../../service/OS-Service';
 
 export default function ServiceOrderDetailsPage() {
@@ -20,9 +22,14 @@ export default function ServiceOrderDetailsPage() {
 
 
   return(
-    <>
-      {fetching && <Loading />}
-      {!fetching && <OsDetailsBody OSData={serviceOrder}/>}
-    </>
+    <Container>
+      <Sidebar>
+        <SideBar />
+      </Sidebar>
+      <Content>
+        {fetching && <Loading />}
+        {!fetching && <OSDetailsBody OSData={serviceOrder}/>}
+      </Content>
+    </Container>
   )
 };

@@ -14,8 +14,15 @@ export const Provider = ({ children }) => {
     email: ''
   });
   const [allServiceOrders, setAllServiceOrders] = useState([]);
-  const [OSFilter, setOSFilter] = useState();
   const [ServiceOrderId, setServiceOrderId] = useState();
+  const [OSFilter, setOSFilter] = useState({
+    identifier: '',
+    creationDate: '',
+    category: '',
+    costCenter: '',
+    status: '',
+    timeFrame: '',
+  });
 
   const context = {
     allUsers,

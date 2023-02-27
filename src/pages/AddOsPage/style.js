@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -16,4 +16,4 @@ export const Content = styled.div`
   display: flex;
   flex: 1 1;
   background-image: linear-gradient(to bottom right, #508bfc, #53D8FB);
-`
+`;

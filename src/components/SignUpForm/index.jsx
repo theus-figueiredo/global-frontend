@@ -37,6 +37,8 @@ export default function SignUpForm() {
       <Form>
         <form>
           <div className='form-row'>
+            <h3>Criar uma conta:</h3>
+            <hr />
             <div className='col'>
               <label htmlFor='firstName'>Nome</label>
               <input className='form-control' type='text' placeholder='Nome' id='firstName' onChange={handleChange}/>
