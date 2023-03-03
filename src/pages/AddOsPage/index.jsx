@@ -5,16 +5,18 @@ import SideBar from '../../components/SideBar';
 import NewOSForm from '../../components/NewOSForm';
 import Loading from '../../components/Loading/Loading';
 
-import { costCenterService } from '../../service/costCenterService';
-import { OS_StatusService } from '../../service/OS-StatusService';
+import CostCenterService from '../../service/CostCenterService';
+import OsStatusService from '../../service/OsStatusService';
 import { osServiceCategory } from '../../service/osServiceCategory';
+import PriorityService from '../../service/PriorityService';
 
 export default function AddOsPage() {
   const [fetchig, setFetching] = useState(true);
   const [allData, setAllData] = useState({
     allStatus: [],
     allCategories: [],
-    allCostCenters: []
+    allCostCenters: [],
+    allPriorities: [],
   });
 
 
@@ -22,14 +24,16 @@ export default function AddOsPage() {
     try {
 
       async function fetchData() {
-        const costCenters = await costCenterService.getAllCostCenters();
-        const status = await OS_StatusService.getAllStatus();
+        const costCenters = await CostCenterService.getAllCostCenters();
+        const status = await OsStatusService.getAllStatus();
         const categories = await osServiceCategory.getAll();
+        const priorities = await PriorityService.getAll();
 
         setAllData({
           allCostCenters: costCenters.data,
           allCategories: categories.data,
           allStatus: status.data,
+          allPriorities: priorities.data,
         });
 
         setFetching(false);
@@ -51,7 +55,6 @@ export default function AddOsPage() {
       <Content>
         {fetchig && Loading}
         {!fetchig && <NewOSForm data={allData}/>}
-        {/* {!fetchig && <AddOsForm data={allData}/>} */}
       </Content>
     </Container>
   )

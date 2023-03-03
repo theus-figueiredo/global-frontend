@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from './styles';
 import UserDataTable from '../../components/UserTable';
-import userService from '../../service/userService';
+import UserService from '../../service/UserService';
 import Loading from '../../components/Loading/Loading';
 import SideBar from '../../components/SideBar';
 
@@ -11,7 +11,7 @@ export default function UserManagementPage() {
 
   useEffect(() => {
     async function getAllUsers() {
-      const { data } = await userService.getAll();
+      const { data } = await UserService.getAll();
       const allUsers = [];
 
       data.forEach((user) => {

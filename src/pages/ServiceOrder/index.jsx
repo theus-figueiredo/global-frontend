@@ -7,6 +7,7 @@ import { Container, Sidebar, Content } from './styles'
 import Loading from '../../components/Loading/Loading';
 import SideBar from '../../components/SideBar';
 
+
 export default function ServiceOrderPage() {
   const [fetching, setFetching] = useState(true);
   const { setAllServiceOrders, user } = useContext(Context);

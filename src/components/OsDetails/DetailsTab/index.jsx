@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import dayjs from 'dayjs';
+
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import SaveIcon from '@mui/icons-material/Save';
@@ -17,17 +19,39 @@ export default function DetailsTab({OSData}) {
 
         <div className='col'>
           <label>Aberta em:</label>
-          <input className='form-control' type='text' name='createdAt' value={OSData.creationDate} disabled={true} />
+          <input className='form-control' type='text' name='createdAt' value={dayjs(OSData.creationDate).format('DD/MM/YYYY HH:MM')} disabled={true} />
         </div>
 
           <div className='col'>
             <label>Aberta por:</label>
-            <input className='form-control' type='text' name='createdBy' value='Jhon Doe' disabled={true} />
+            <input className='form-control' type='text' name='createdBy' value={`${OSData['user']['firstName']} ${OSData['user']['lastName']}`} disabled={true} />
           </div>
 
         </div>
 
         <br />
+
+        <div className='row'>
+          <div className='col'>
+              <div className='form-group'>
+              <label>Unidade:</label>
+                <select className='form-select' aria-label='Defalt select example' disabled={true} value={OSData['costCenter']['name']}>
+                  <option selected={true}>{OSData['costCenter']['name']}</option>
+                </select>
+              </div>
+            </div>
+
+            <div className='col'>
+              <div className='form-group'>
+                <label>Categoria do Serviço:</label>
+                <select className='form-select' aria-label='Defalt select example' disabled={true} value={OSData['category']['category']}>
+                  <option selected={true}>{OSData['category']['category']}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <br />
 
       <div className='row'>
 
@@ -47,29 +71,6 @@ export default function DetailsTab({OSData}) {
                 <option selected={true}>{OSData['status']['status']}</option>
               </select>
             </div>
-
-        </div>
-
-        <br />
-        <div className='row'>
-
-        <div className='col'>
-            <div className='form-group'>
-            <label>Unidade:</label>
-              <select className='form-select' aria-label='Defalt select example' disabled={disabled} value={OSData['costCenter']['name']}>
-                <option selected={true}>{OSData['costCenter']['name']}</option>
-              </select>
-            </div>
-          </div>
-
-          <div className='col'>
-            <div className='form-group'>
-              <label>Categoria do Serviço:</label>
-              <select className='form-select' aria-label='Defalt select example' disabled={disabled} value={OSData['category']['category']}>
-                <option selected={true}>{OSData['category']['category']}</option>
-              </select>
-            </div>
-          </div>
 
         </div>
 

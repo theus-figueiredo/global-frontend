@@ -1,17 +1,16 @@
 import http from './http-common'
 
-const getAllCostCenters = async () => {
-  const costCenters = await http.get('/cost-center');
-  return costCenters;
+class CostCenterService {
+  endPoint = '/cost-center';
+
+  async getAllCostCenters() {
+    return await http.get(this.endPoint);
+  };
+
+  async getCostCenterById(id) {
+    return await http.get(`${this.endPoint}/${id}`);
+  };
 };
 
 
-const getCostCenterById = async (id) => {
-  const costCenter = await http.get(`/cost-center/${id}`);
-  return costCenter;
-};
-
-export const costCenterService = {
-  getAllCostCenters,
-  getCostCenterById,
-};
+export default new CostCenterService();

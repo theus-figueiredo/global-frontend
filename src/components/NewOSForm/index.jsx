@@ -1,31 +1,34 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Container } from './styles';
 
-import dayjs from 'dayjs';
-
 import SaveIcon from '@mui/icons-material/Save';
-
-const priorityList = [
-  {id: 'P0', label: 'P0 - Muito emergêncial'},
-  {id: 'P1', label: 'P1 - Emergêncial'},
-  {id: 'P2', label: 'P2 - Regular'},
-  {id: 'P3', label: 'P3 - Prioridade Baixa'},
-];
+import OS_Service from '../../service/OS-Service';
 
 export default function NewOSForm({ data }) {
   const [dataToCreateOS, setDataToCreateOS] = useState({
-    costCenter: '',
-    serviceStatus: '',
-    serviceCategory: '',
+    costCenter: 0,
+    serviceStatus: 0,
+    serviceCategory: 0,
     identifier: '',
     description: '',
-    requestedAt: dayjs(),
-    priority: ''
+    requestedAt: new Date(),
+    priority: 0
   });
 
-  function handleChange({ target: { id, value }}) {
-    setDataToCreateOS({...dataToCreateOS, [id]: value})
+  const navigate = useNavigate();
+
+  function handleChangeForString({ target: { id, value }}) { setDataToCreateOS({...dataToCreateOS, [id]: value })};
+
+  function handleChangeForNumber({ target: { id, value }}) {setDataToCreateOS({...dataToCreateOS, [id]: Number(value)})};
+
+  async function handleCreateClick() {
+    const token = localStorage.getItem('token');
+    const newServiceOrder = await OS_Service.store(dataToCreateOS, token);
+
+    const redirectLink = `/os/${newServiceOrder.data.id}`;
+    navigate(redirectLink);
   };
 
   return (
@@ -58,7 +61,7 @@ export default function NewOSForm({ data }) {
                             <div className='row'>
                               <div>
                                 <label htmlFor='identifier'>Numero da OS:</label>
-                                <input type='text' className='form-control' placeholder='OS1234' id='identifier' onChange={handleChange}/>
+                                <input type='text' className='form-control' placeholder='OS1234' id='identifier' onChange={handleChangeForString}/>
                               </div>
                             </div>
 
@@ -67,7 +70,7 @@ export default function NewOSForm({ data }) {
                             <div className='row'>
                               <div className='col'>
                                 <label htmlFor='costCenter'>Unidade:</label>
-                                <select className='form-select' id='costCenter' value={dataToCreateOS.costCenter} onChange={handleChange}>
+                                <select className='form-select' id='costCenter' value={dataToCreateOS.costCenter} onChange={handleChangeForNumber}>
                                   <option>Selecionar</option>
                                   {data.allCostCenters.map((costCenter) => <option key={costCenter.id} value={costCenter.id}>{costCenter.name}</option>)}
                                 </select>
@@ -75,9 +78,9 @@ export default function NewOSForm({ data }) {
 
                               <div className='col'>
                                 <label>Urgência: </label>
-                                <select className='form-select' id='priority' value={dataToCreateOS.priority} onChange={handleChange}>
+                                <select className='form-select' id='priority' value={dataToCreateOS.priority} onChange={handleChangeForNumber}>
                                   <option>Selecionar</option>
-                                  {priorityList.map((priority) => <option key={priority.id} value={priority.id}>{priority.label}</option>)}
+                                  {data.allPriorities.map((priority) => <option key={priority.id} value={priority.id}>{priority.level}</option>)}
                                 </select>
                               </div>
                             </div>
@@ -87,7 +90,7 @@ export default function NewOSForm({ data }) {
                             <div className='row'>
                               <div className='col'>
                                 <label>Categoria do serviço</label>
-                                <select className='form-select' id='serviceCategory' value={dataToCreateOS.serviceCategory} onChange={handleChange}>
+                                <select className='form-select' id='serviceCategory' value={dataToCreateOS.serviceCategory} onChange={handleChangeForNumber}>
                                   <option>Selecionar</option>
                                   {data.allCategories.map((category) => <option key={category.id} value={category.id}>{category.category}</option>)}
                                 </select>
@@ -95,7 +98,7 @@ export default function NewOSForm({ data }) {
 
                               <div className='col'>
                                 <label htmlFor='serviceStatus'>Status do serviço</label>
-                                <select className='form-select' id='serviceStatus' value={dataToCreateOS.serviceStatus} onChange={handleChange}>
+                                <select className='form-select' id='serviceStatus' value={dataToCreateOS.serviceStatus} onChange={handleChangeForNumber}>
                                   <option>Selecionar</option>
                                   {data.allStatus.map((status) => <option key={status.id} value={status.id}>{status.status}</option>)}
                                 </select>
@@ -107,7 +110,7 @@ export default function NewOSForm({ data }) {
                             <div className='row align-self-center'>
                               <div className='col '>
                                 <label htmlFor='description'>Descritivo:</label>
-                                <textarea className='form-control' rows={6} placeholder='Descrição do serviço' value='' id='description' onChange={handleChange}/>
+                                <textarea className='form-control' rows={6} placeholder='Descrição do serviço' value='' id='description' onChange={handleChangeForString}/>
                               </div>
                             </div>
 
@@ -115,7 +118,7 @@ export default function NewOSForm({ data }) {
 
                             <div className='row'>
                               <div className='col d-flex justify-content-start'>
-                                <button className='btn btn-primary'><SaveIcon /> Adicionar nova OS</button>
+                                <button className='btn btn-primary' onClick={handleCreateClick}><SaveIcon /> Adicionar nova OS</button>
                               </div>
                             </div>
 

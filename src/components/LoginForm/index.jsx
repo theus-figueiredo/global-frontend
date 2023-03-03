@@ -2,7 +2,7 @@ import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container } from './styles';
 import Context from '../../context/Context';
-import userService from '../../service/userService';
+import UserService from '../../service/UserService';
 
 const LoginForm = () => {
   const [ userData, setUserData ] = useState({ email: '', password: ''});
@@ -26,7 +26,7 @@ const LoginForm = () => {
   const handleInputChange = ({ target: { id, value } }) => setUserData({ ...userData, [id]: value });
 
   const handleLoginClick = async () => {
-    const response = await userService.login(userData.email, userData.password);
+    const response = await UserService.login(userData.email, userData.password);
     if(response.status === 200) {
 
       console.log(response.data);

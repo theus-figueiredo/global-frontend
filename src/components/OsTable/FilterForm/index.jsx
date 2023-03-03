@@ -9,8 +9,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { OS_StatusService } from '../../../service/OS-StatusService';
-import { costCenterService } from '../../../service/costCenterService';
+import OsStatusService from '../../../service/OsStatusService';
+import CostCenterService from '../../../service/CostCenterService';
 import { osServiceCategory } from '../../../service/osServiceCategory';
 
 export default function FilterForm({setOS}) {
@@ -37,8 +37,8 @@ export default function FilterForm({setOS}) {
 
   useEffect(() => {
     async function populateState() {
-      const status = await OS_StatusService.getAllStatus();
-      const costCenters = await costCenterService.getAllCostCenters();
+      const status = await OsStatusService.getAllStatus();
+      const costCenters = await CostCenterService.getAllCostCenters();
       const { data } = await osServiceCategory.getAll();
 
       setStatus(status.data);

@@ -1,31 +1,39 @@
+import { datePickerToolbarClasses } from '@mui/x-date-pickers';
 import http from './http-common';
 
-const login = async (email, password) => {
-  const data = { email, password };
-  const loginResponse = await http.post('/login', { data });
-  return loginResponse;
-};
+class UserService {
 
-const getAll = async () => {
-  const users = await http.get('/user');
-  return users;
-};
+  endPoints = {
+    login: '/login',
+    general: '/user'
+  }
 
-const getUserById = async (id) => {
-  const user = await http.get(`user/${id}`);
-  return user;
-};
+  async login (email, password) {
+    const data = { email, password };
+    return await http.post(this.endPoints.login, data);
+  }
 
-const updateUser = async (id, data) => {
-  const updatedUser = await http.patch(`user/${id}`, { data });
-  return updatedUser
-};
+  async getAll () {
+    return await http.get(this.endPoints.general);
+  };
 
-const userService = {
-  login,
-  getAll,
-  getUserById,
-  updateUser,
-};
 
-export default userService;
+  async getById (id) {
+    return await http.get(`${this.endPoints.general}/${id}`);
+  };
+
+  async updateUser(id, data) {
+    return await http.patch(`${this.endPoints.general}/${id}`, {data: data});
+  };
+
+  async addCostCenter(userId, costCenters) {
+    return await http.post(`${this.endPoints.general}/${userId}/cost-center`, {costCenters});
+  };
+
+  async removeCostCenter(userId, ids) {
+    const data = {ids};
+    return await http.delete(`${this.endPoints.general}/${userId}/cost-center`, {data});
+  }
+
+}
+export default new UserService();
